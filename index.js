@@ -1,10 +1,3 @@
-/*
-  - only need to render cylinder and spheres once
-  - register click event on circles
-  - how to position circles?
-  - pan and zoom for scene
-*/
-
 const width = window.innerWidth
 const height = window.innerHeight
 
@@ -17,7 +10,7 @@ document.body.appendChild(renderer.domElement)
 
 const skyboxGeometry = new THREE.CubeGeometry(10000, 10000, 10000)
 const skyboxMaterial = new THREE.MeshBasicMaterial({
-  color: 0x000000,
+  color: 0xcccccc,
   side: THREE.BackSide
 })
 const skybox = new THREE.Mesh(skyboxGeometry, skyboxMaterial)
@@ -29,27 +22,26 @@ pointLight.position.set(0, 300, 200)
 
 scene.add(pointLight)
 
-const cubeGeometry = new THREE.CubeGeometry(100, 100, 100)
-const cubeMaterial = new THREE.MeshLambertMaterial({ color: 0x1ec876 })
-const cube = new THREE.Mesh(cubeGeometry, cubeMaterial)
-
-cube.rotation.y = Math.PI * 45 / 180
-
-scene.add(cube)
+const cylinderGeometry = new THREE.CylinderGeometry(50, 50, 100, 32)
+const cylinderMaterial = new THREE.MeshLambertMaterial({ color: 0x1ec876 })
+const cylinder = new THREE.Mesh(cylinderGeometry, cylinderMaterial)
+scene.add(cylinder)
 
 const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 10000)
 
 camera.position.y = 160
 camera.position.z = 400
 
-camera.lookAt(cube.position)
+camera.lookAt(cylinder.position)
 
 scene.add(camera)
+
+const controls = new THREE.OrbitControls(camera)
 
 render()
 
 function render() {
-  renderer.render(scene, camera)
-  cube.rotation.y -= clock.getDelta()
   requestAnimationFrame(render)
+  cylinder.rotation.x -= clock.getDelta()
+  renderer.render(scene, camera)
 }
